@@ -235,9 +235,40 @@ void RpBar::init_gui() {
   window_attribs.background_pixmap = ParentRelative;
   window_attribs.event_mask = ExposureMask | ButtonPressMask;
   bar_h = get_font_height() + RPBAR_PADDING;
-  bar_x = 0;
-  bar_y = DisplayHeight(display, screen) - bar_h;
-  bar_w = DisplayWidth(display, screen);
+  char screen_val[2];
+  sprintf(screen_val,"%d", RPBAR_SCREEN);
+  char cmd[256] = "ratpoison -c \"sdump\" | perl -pe \"s/^.*?,{";
+  strcat(cmd, screen_val);
+  strcat(cmd, "}[^0-9]*[0-9]\\s[0-9]\\s([0-9]*)\\s([0-9]*)\\s([0-9]*)\\s([0-9]*).*/\\1\\n\\2\\n\\3\\n\\4/g\"");
+  FILE* stream;
+  char buff[16];
+
+  if ((stream = popen(cmd, "r"))==NULL) {
+    throw RpBarException("popen failed");
+  }
+
+  int screen_x, screen_y, screen_w, screen_h;
+  if (fgets(buff, sizeof(buff), stream) == NULL) {
+    throw RpBarException("fgets failed");
+  }
+  screen_x = atoi(buff);
+  if (fgets(buff, sizeof(buff), stream) == NULL) {
+    throw RpBarException("fgets failed");
+  }
+  screen_y = atoi(buff);
+  if (fgets(buff, sizeof(buff), stream) == NULL) {
+    throw RpBarException("fgets failed");
+  }
+  screen_w = atoi(buff);
+  if (fgets(buff, sizeof(buff), stream) == NULL) {
+    throw RpBarException("fgets failed");
+  }
+  screen_h = atoi(buff);
+  pclose(stream);
+
+  bar_x = screen_x;
+  bar_y = RPBAR_TOP ? screen_y : screen_y + screen_h - bar_h;
+  bar_w = screen_w;
   win = XCreateWindow(display, root, bar_x, bar_y, bar_w, bar_h, 0,
                       DefaultDepth(display, screen), CopyFromParent,
                       DefaultVisual(display, screen), CWOverrideRedirect |

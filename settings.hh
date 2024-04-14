@@ -10,6 +10,9 @@
 // to be used for whether rpbar is on top or bottom
 #define RPBAR_TOP                   1
 
+// the RATPOISON screen(aka monitor) to display the bar on
+#define RPBAR_SCREEN                0
+
 // padding around text (top and bottom)
 #define RPBAR_PADDING               4
 // for communication with ratpoison. Bigger shouldn't hurt.
