@@ -1,3 +1,7 @@
+merrittlj's fork - upgraded rpbar
+======
+
+In this fork, I implemented RPBAR_TOP(move the bar to the top of the screen), and multi-monitor/screen support. rpbar didn't work with multiple monitors at first, due to how Rat Poison sets up the monitors. This fork adds support for multiple monitors through the configuration of RPBAR_SCREEN.
 
 rpbar
 ======

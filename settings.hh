@@ -8,7 +8,10 @@
 #define RPBAR_SEP                   "$)@="
 
 // to be used for whether rpbar is on top or bottom
-#define RPBAR_TOP                   1
+#define RPBAR_TOP                   0
+
+// the RATPOISON screen(aka monitor) to display the bar on
+#define RPBAR_SCREEN                0
 
 // padding around text (top and bottom)
 #define RPBAR_PADDING               4
@@ -25,6 +28,6 @@
 #define RPBAR_MAINBGCOLOR           "#202020"
 #define RPBAR_MAINFGCOLOR           "#76ff00"
 
-#define RPBAR_FONT_STR "monospace:size=10"
+#define RPBAR_FONT_STR "Libertinus Mono:size=18"
 
 #endif /* end of include guard: SETTINGS_N7KJ765I */
