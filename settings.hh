@@ -11,7 +11,7 @@
 #define RPBAR_TOP                   0
 
 // the RATPOISON screen(aka monitor) to display the bar on
-#define RPBAR_SCREEN                0
+#define RPBAR_SCREEN                1
 
 // padding around text (top and bottom)
 #define RPBAR_PADDING               4
@@ -22,12 +22,12 @@
 #define RPBAR_BUTTON_MARGIN         10
 
 // Look at wmii or vim colorschemes for inspiration
-#define RPBAR_BORDERCOLOR           "#666666"
-#define RPBAR_BGCOLOR               "#080808"
-#define RPBAR_FGCOLOR               "#D0D0D0"
-#define RPBAR_MAINBGCOLOR           "#202020"
-#define RPBAR_MAINFGCOLOR           "#76ff00"
+#define RPBAR_BORDERCOLOR           "#d7d7d7"
+#define RPBAR_BGCOLOR               "#353535"
+#define RPBAR_FGCOLOR               "#d7d7d7"
+#define RPBAR_MAINBGCOLOR           "#d4ccb9"
+#define RPBAR_MAINFGCOLOR           "#45363b"
 
-#define RPBAR_FONT_STR "Libertinus Mono:size=18"
+#define RPBAR_FONT_STR "Libertinus Mono:size=14"
 
 #endif /* end of include guard: SETTINGS_N7KJ765I */

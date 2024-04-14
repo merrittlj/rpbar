@@ -352,13 +352,7 @@ void RpBar::refresh(){
        ++itr) {
     std::string& button_label(*itr);
     char last_char = button_label[button_label.length()-1];
-    // '*' -> main win
-    // '+' -> 'alternate' win
-    // '-' -> other
-    // else, it's a 'no managed windows' message.
-    if (last_char!='s') {
-      button_label.erase(button_label.length()-1);
-    }
+
     // highlight current window
     unsigned long bg;
     const char * fg_color = NULL;
