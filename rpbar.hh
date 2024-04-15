@@ -69,6 +69,8 @@ private:
   void init_gui();
 
   void refresh();
+  // refresh() should be called after
+  void update_status();
 
   int
   draw_text(const int, const int, const char * const,

@@ -291,15 +291,10 @@ void RpBar::init_gui() {
   screen_h = atoi(buff);
   pclose(stream);
 
-  if (!gettextprop(display, root, XA_WM_NAME, status, sizeof(status)))
-	strcpy(status, "rpbar");
-
   bar_x = screen_x;
   bar_y = RPBAR_TOP ? screen_y : screen_y + screen_h - bar_h;
   bar_w = screen_w;
-  status_width = text_width(status);
-  status_width += status_width / 2;
-  faked_bar_w = bar_w - status_width;
+  update_status();
   win = XCreateWindow(display, root, bar_x, bar_y, bar_w, bar_h, 0,
                       DefaultDepth(display, screen), CopyFromParent,
                       DefaultVisual(display, screen), CWOverrideRedirect |
@@ -318,7 +313,14 @@ void RpBar::run() {
   init_socket();
   init_gui();
   struct timeval timeout;
+  char old_root_name[256], root_name[256];
   while (true) {
+    gettextprop(display, root, XA_WM_NAME, root_name, sizeof(root_name));
+    if (strcmp(old_root_name, root_name) != 0) {
+      strcpy(old_root_name, root_name);
+      update_status();
+      refresh();
+    }
     FD_ZERO(&fds);
     FD_SET(x11_fd, &fds);
     FD_SET(sock_fd, &fds);
@@ -420,6 +422,15 @@ void RpBar::refresh(){
   }
   XCopyArea(display, drawable, win, gc, 0, 0, bar_w, bar_h, 0, 0);
   XFlush(display);
+}
+
+void RpBar::update_status(){
+  if (!gettextprop(display, root, XA_WM_NAME, status, sizeof(status)))
+	strcpy(status, "rpbar");
+
+  status_width = text_width(status);
+  status_width += status_width / 2;
+  faked_bar_w = bar_w - status_width;
 }
 
 // draw_text serves two purposes.
