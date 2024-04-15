@@ -15,6 +15,7 @@
 
 // padding around text (top and bottom)
 #define RPBAR_PADDING               4
+
 // for communication with ratpoison. Bigger shouldn't hurt.
 #define RPBAR_BUFSIZE               2048
 #define RPBAR_TIMEOUT_S             5
@@ -27,6 +28,8 @@
 #define RPBAR_FGCOLOR               "#d7d7d7"
 #define RPBAR_MAINBGCOLOR           "#d4ccb9"
 #define RPBAR_MAINFGCOLOR           "#45363b"
+#define RPBAR_STATUSBGCOLOR         "#d7d7d7"
+#define RPBAR_STATUSFGCOLOR         "#353535"
 
 #define RPBAR_FONT_STR "Libertinus Mono:size=14"
 

@@ -104,8 +104,9 @@ private:
   fd_set fds;
   std::string socket_path;
 
-  int bar_x, bar_y, bar_w, bar_h;
-  unsigned long bordercolor, bgcolor, fgcolor, mainbgcolor, mainfgcolor;
+  char status[256];
+  int bar_x, bar_y, status_width, faked_bar_w, bar_w, bar_h;
+  unsigned long bordercolor, bgcolor, fgcolor, mainbgcolor, mainfgcolor, statusbgcolor, statusfgcolor;
 
   char buffer[RPBAR_BUFSIZE];
   std::vector<std::string> windows;
@@ -120,6 +121,7 @@ private:
   FcPattern * fc_pattern;
 };
 
+int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 void rstrip(char *s);
 void rpbarsend(int argc, const char *argv[]);
 

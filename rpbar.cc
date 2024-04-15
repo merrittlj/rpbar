@@ -36,11 +36,34 @@
 
 #include <algorithm>
 
+#include <X11/Xatom.h>
+
 #include "drw.h"
 
 namespace rpbar
 {
+// shamelessly stolen from dwm.c
+int gettextprop(Display *dpy, Window w, Atom atom, char *text, unsigned int size)
+{
+	char **list = NULL;
+	int n;
+	XTextProperty name;
 
+	if (!text || size == 0)
+		return 0;
+	text[0] = '\0';
+	if (!XGetTextProperty(dpy, w, &name, atom) || !name.nitems)
+		return 0;
+	if (name.encoding == XA_STRING) {
+		strncpy(text, (char *)name.value, size - 1);
+	} else if (XmbTextPropertyToTextList(dpy, &name, &list, &n) >= Success && n > 0 && *list) {
+		strncpy(text, *list, size - 1);
+		XFreeStringList(list);
+	}
+	text[size - 1] = '\0';
+	XFree(name.value);
+	return 1;
+}
 unsigned long RpBar::get_color(const char *colstr) {
   Colormap cmap = DefaultColormap(display, screen);
   XColor color;
@@ -230,6 +253,7 @@ void RpBar::init_gui() {
   bordercolor = get_color(RPBAR_BORDERCOLOR);
   bgcolor = get_color(RPBAR_BGCOLOR);
   mainbgcolor = get_color(RPBAR_MAINBGCOLOR);
+  statusbgcolor = get_color(RPBAR_STATUSBGCOLOR);
   init_font(RPBAR_FONT_STR);
   window_attribs.override_redirect = 1;
   window_attribs.background_pixmap = ParentRelative;
@@ -267,9 +291,15 @@ void RpBar::init_gui() {
   screen_h = atoi(buff);
   pclose(stream);
 
+  if (!gettextprop(display, root, XA_WM_NAME, status, sizeof(status)))
+	strcpy(status, "rpbar");
+
   bar_x = screen_x;
   bar_y = RPBAR_TOP ? screen_y : screen_y + screen_h - bar_h;
   bar_w = screen_w;
+  status_width = text_width(status);
+  status_width += status_width / 2;
+  faked_bar_w = bar_w - status_width;
   win = XCreateWindow(display, root, bar_x, bar_y, bar_w, bar_h, 0,
                       DefaultDepth(display, screen), CopyFromParent,
                       DefaultVisual(display, screen), CWOverrideRedirect |
@@ -344,7 +374,7 @@ void RpBar::refresh(){
   XSetForeground(display, gc, bordercolor);
   XFillRectangle(display, drawable, gc, 0, 0, bar_w, bar_h);
 
-  int button_width = bar_w/windows.size();
+  int button_width = faked_bar_w/windows.size();
   int curx = 0;
 
   for (std::vector<std::string>::iterator itr = windows.begin();
@@ -382,6 +412,11 @@ void RpBar::refresh(){
     draw_text(x, y, button_label.c_str(), fg_color, render);
 
     curx += button_width;
+    if (itr==windows.end()-1) {
+      XSetForeground(display, gc, statusbgcolor);
+      XFillRectangle(display, drawable, gc, curx+1, 1, width, bar_h-2);
+      draw_text(curx + (text_width(status) / 4), y, status, RPBAR_STATUSFGCOLOR, render);
+    }
   }
   XCopyArea(display, drawable, win, gc, 0, 0, bar_w, bar_h, 0, 0);
   XFlush(display);
