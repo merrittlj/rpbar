@@ -24,6 +24,8 @@
 #define RPBAR_FGCOLOR               "#D0D0D0"
 #define RPBAR_MAINBGCOLOR           "#202020"
 #define RPBAR_MAINFGCOLOR           "#76ff00"
+#define RPBAR_STATUSBGCOLOR         "#D0D0D0"
+#define RPBAR_STATUSFGCOLOR         "#080808"
 
 #define RPBAR_FONT_STR "monospace:size=10"
 
